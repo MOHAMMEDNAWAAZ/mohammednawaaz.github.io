@@ -2,6 +2,57 @@
    MAIN.JS  —  Portfolio Site for Nawaaz Mohammed
    ============================================================ */
 
+// ── Auto-scroll hint: scroll down then back, twice ─────────────
+(function autoScrollHint() {
+  const SCROLL_AMOUNT = 220;   // px to scroll down each time
+  const SCROLL_DURATION = 600; // ms for each scroll move
+  const PAUSE = 400;           // ms pause at bottom before scrolling back
+
+  function smoothScrollTo(target, duration, onDone) {
+    const start = window.scrollY;
+    const diff  = target - start;
+    let startTime = null;
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      const elapsed  = ts - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease     = progress < 0.5
+        ? 2 * progress * progress
+        : -1 + (4 - 2 * progress) * progress; // easeInOutQuad
+      window.scrollTo(0, start + diff * ease);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        if (onDone) onDone();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function runCycle(count, onDone) {
+    if (count <= 0) { if (onDone) onDone(); return; }
+    smoothScrollTo(SCROLL_AMOUNT, SCROLL_DURATION, () => {
+      setTimeout(() => {
+        smoothScrollTo(0, SCROLL_DURATION, () => {
+          setTimeout(() => runCycle(count - 1, onDone), 300);
+        });
+      }, PAUSE);
+    });
+  }
+
+  // Start after hero animations finish; cancel if user scrolls first
+  let cancelled = false;
+  const cancelOnScroll = () => { cancelled = true; };
+  window.addEventListener('scroll', cancelOnScroll, { once: true, passive: true });
+
+  setTimeout(() => {
+    if (cancelled) return;
+    window.removeEventListener('scroll', cancelOnScroll);
+    runCycle(2, null);
+  }, 2600);
+})();
+
 // ── Navbar: scroll effect + active link highlight ──────────────
 const navbar = document.getElementById('navbar');
 const sections = document.querySelectorAll('section[id]');
