@@ -53,6 +53,12 @@
   }, 2600);
 })();
 
+// ── Scroll hint: continuous pulse after fade-in completes ───────
+setTimeout(() => {
+  const hint = document.querySelector('.hero-scroll-hint');
+  if (hint) hint.classList.add('is-pulsing');
+}, 2200);
+
 // ── Navbar: scroll effect + active link highlight ──────────────
 const navbar = document.getElementById('navbar');
 const sections = document.querySelectorAll('section[id]');
