@@ -234,18 +234,6 @@ setTimeout(typeLoop, 1600);
     animId = requestAnimationFrame(animate);
   }
   animate();
-
-  // Pause when hero is scrolled past (perf)
-  const hero = document.getElementById('hero');
-  const io = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      if (!animId) animate();
-    } else {
-      cancelAnimationFrame(animId);
-      animId = null;
-    }
-  }, { threshold: 0 });
-  io.observe(hero);
 })();
 
 // ── Scroll-reveal (AOS-lite) ────────────────────────────────────
@@ -327,19 +315,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
-// ── Cursor subtle glow trail on hero ───────────────────────────
+// ── Cursor subtle glow trail (full page) ───────────────────────
 (function initCursorGlow() {
-  const hero   = document.getElementById('hero');
   const canvas = document.getElementById('particleCanvas');
   const ctx    = canvas.getContext('2d');
-  let mx = -999, my = -999;
 
-  hero.addEventListener('mousemove', e => {
-    mx = e.clientX;
-    my = e.clientY;
-
-    // Draw a soft radial glow at cursor position
-    const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 160);
+  document.addEventListener('mousemove', e => {
+    const grad = ctx.createRadialGradient(e.clientX, e.clientY, 0, e.clientX, e.clientY, 160);
     grad.addColorStop(0, 'rgba(0, 212, 255, 0.06)');
     grad.addColorStop(1, 'rgba(0, 212, 255, 0)');
     ctx.fillStyle = grad;
