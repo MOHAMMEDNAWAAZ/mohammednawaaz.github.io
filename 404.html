@@ -112,9 +112,23 @@
     <span class="divider">Error</span>
     <div class="code">404</div>
     <h1>Page Not Found</h1>
-    <p>Looks like this path doesn't exist in the infrastructure.<br />Let's get you back to base.</p>
-    <a href="" class="btn">&#8592; Back to Home</a>
+    <p>Looks like this path doesn't exist in the infrastructure.<br />Redirecting you to home in <span id="cd">4</span>s&hellip;</p>
+    <a href="https://mohammednawaaz.github.io" class="btn">&#8592; Back to Home</a>
   </div>
+
+  <script>
+    // Auto-redirect any unknown path to the homepage after 4 seconds
+    var remaining = 4;
+    var cdEl = document.getElementById('cd');
+    var timer = setInterval(function () {
+      remaining--;
+      if (cdEl) cdEl.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(timer);
+        window.location.replace('https://mohammednawaaz.github.io');
+      }
+    }, 1000);
+  </script>
 
   <script>
     (function () {
