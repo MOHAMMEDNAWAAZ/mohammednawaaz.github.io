@@ -478,8 +478,9 @@ document.querySelectorAll('a[download]').forEach(link => {
     toggleFab();
   });
 
-  // Close when clicking outside
+  // Close when clicking outside or scrolling
   document.addEventListener('click', () => toggleFab(false));
+  window.addEventListener('scroll', () => toggleFab(false), { passive: true });
   group.addEventListener('click', e => e.stopPropagation());
 
   // Share button
