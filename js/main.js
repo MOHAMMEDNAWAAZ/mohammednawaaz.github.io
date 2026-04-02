@@ -456,6 +456,54 @@ document.querySelectorAll('a[download]').forEach(link => {
   });
 });
 
+// ── Navbar Resume dropdown (toggle + share) ────────────────────
+(function initNavResume() {
+  const wrap     = document.getElementById('navResumeWrap');
+  const btn      = document.getElementById('navResumeBtn');
+  const shareBtn = document.getElementById('navShareBtn');
+  if (!wrap || !btn) return;
+
+  function toggleNav(force) {
+    const isOpen = force !== undefined ? force : !wrap.classList.contains('open');
+    wrap.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen);
+  }
+
+  btn.addEventListener('click', e => { e.stopPropagation(); toggleNav(); });
+  document.addEventListener('click', () => toggleNav(false));
+  window.addEventListener('scroll', () => toggleNav(false), { passive: true });
+  wrap.addEventListener('click', e => e.stopPropagation());
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+      const pdfUrl  = 'Nawaaz_Mohammed_resume.pdf';
+      const fileName = 'Nawaaz_Mohammed_Resume.pdf';
+      toggleNav(false);
+
+      if (navigator.canShare) {
+        shareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Share';
+        fetch(pdfUrl)
+          .then(r => r.blob())
+          .then(blob => {
+            const file = new File([blob], fileName, { type: 'application/pdf' });
+            if (navigator.canShare({ files: [file] })) {
+              return navigator.share({ title: 'Nawaaz Mohammed — Resume', text: 'Resume of Nawaaz Mohammed, DevOps Engineer', files: [file] });
+            }
+            return navigator.share({ title: 'Nawaaz Mohammed — Resume', url: window.location.origin + '/' + pdfUrl });
+          })
+          .then(() => { shareBtn.innerHTML = '<i class="fas fa-check"></i> Shared!'; setTimeout(() => { shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share'; }, 2000); })
+          .catch(() => { shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share'; });
+      } else if (navigator.share) {
+        navigator.share({ title: 'Nawaaz Mohammed — Resume', url: window.location.origin + '/' + pdfUrl }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(window.location.origin + '/' + pdfUrl)
+          .then(() => { shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!'; setTimeout(() => { shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share'; }, 2000); })
+          .catch(() => {});
+      }
+    });
+  }
+})();
+
 // ── Floating FAB group (toggle + share) ────────────────────────
 (function initFab() {
   const group    = document.getElementById('fabGroup');

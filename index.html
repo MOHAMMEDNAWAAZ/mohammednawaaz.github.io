@@ -58,9 +58,19 @@
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#contact">Contact</a></li>
         <li>
-          <a href="Nawaaz_Mohammed_resume.pdf" download class="btn-download-nav">
-            <i class="fas fa-download"></i> Resume
-          </a>
+          <div class="nav-resume-wrap" id="navResumeWrap">
+            <button class="btn-download-nav" id="navResumeBtn" aria-expanded="false">
+              <i class="fas fa-download"></i> Resume
+            </button>
+            <div class="nav-resume-dropdown" id="navResumeDropdown">
+              <a href="Nawaaz_Mohammed_resume.pdf" download id="cv-download-nav" class="nav-resume-option">
+                <i class="fas fa-download"></i> Download
+              </a>
+              <button class="nav-resume-option" id="navShareBtn">
+                <i class="fas fa-share-alt"></i> Share
+              </button>
+            </div>
+          </div>
         </li>
       </ul>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
